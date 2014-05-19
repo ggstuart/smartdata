@@ -13,4 +13,4 @@ Example usage
 
 ipython notebook example
 ---
-Also included is an example ipython notebook (Baseload calculations.ipynb) which uses the dat adapter. The notebook can be viewed directly [here](http://nbviewer.ipython.org/github/ggstuart/smartdata/blob/master/Baseload%20calculations.ipynb)
+Also included is an example ipython notebook (Baseload calculations.ipynb) which uses the data adapter. The notebook can be viewed directly [here](http://nbviewer.ipython.org/github/ggstuart/smartdata/blob/master/Baseload%20calculations.ipynb)
