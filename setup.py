@@ -24,10 +24,4 @@ setup(
     packages = find_packages(),
     py_modules = ['smartdata'],
     install_requires = requires,
-
-    entry_points = {
-        'console_scripts' : [
-        'my_func = lib.main:main'         
-        ]
-        },
 )
