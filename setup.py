@@ -22,6 +22,7 @@ setup(
     author_email = "gstuart@dmu.ac.uk",
     url = "",
     packages = find_packages(),
+    py_modules = ['smartdata'],
     install_requires = requires,
 
     entry_points = {
