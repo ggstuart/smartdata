@@ -73,3 +73,32 @@ class SmartspacesCSVAdapter():
         df = DataFrame(data)
         df.set_index('date_time', inplace=True)
         return df
+
+
+class SmartspacesJSONAdapter():
+    def __init__(self, base_url="smartspaces.dmu.ac.uk"):
+        self.base_url = base_url
+
+    def _json_from_url(self, url, element):
+        response = requests.get(url)
+        return response.json()[element]
+
+    def organisations(self):
+        return self._json_from_url('http://%s/api/v1/organisations' % self.base_url, 'organisations')
+
+    def buildings(self, org_data):
+        return self._json_from_url(org_data['buildings_url'], 'buildings')
+
+    def virtual_meters(self, building_data):
+        return self._json_from_url(building_data['virtual_meters_url'], 'virtual_meters')
+
+    def meters(self, building_data):
+        return self._json_from_url(building_data['meters_url'], 'meters')
+
+    def meter(self, meter_data):
+        return self._json_from_url(meter_data['url'], 'meter')
+
+#Not implemented on server - oops
+#    def virtual_meter(self, vm_data):
+#        return self._json_from_url(vm_data['url'], 'virtual_meters')
+
