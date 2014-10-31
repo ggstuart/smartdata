@@ -56,23 +56,41 @@ class SmartspacesCSVAdapter():
         if force or not os.path.exists(tmp_file):
             data = self.data(meter_id, period)
             log.debug("saving to cache...")
-            with open(tmp_file, 'w', newline="") as f:
-                writer = csv.DictWriter(f, data[0].keys())
-                writer.writeheader()
-                for row in data:
-                    writer.writerow(row)
+            self._save_to_cache(data, tmp_file)
         else:
             log.info("loading from cache (%s)..." % tmp_file)
-            with open(tmp_file, 'r') as f:
-                reader = csv.DictReader(f)
-                data = []
-                for row in reader:
-                    row['date_time'] = datetime.strptime(row['date_time'], '%Y-%m-%d %H:%M:%S')
-                    row['consumption (kWh)'] = float(row['consumption (kWh)'])
-                    data.append(row)
+            data = self._load_from_cache(tmp_file)
         df = DataFrame(data)
         df.set_index('date_time', inplace=True)
         return df
+
+    def _load_from_cache(self, filename):
+        with open(filename, 'r') as f:
+            reader = csv.DictReader(f)
+            data = []
+            for row in reader:
+                for key in row.keys():
+                    if key == 'date_time':
+                        row[key] = datetime.strptime(row[key], '%Y-%m-%d %H:%M:%S')
+                    else:
+                        row[key] = float(row[key])
+                data.append(row)
+        return data
+
+    def _write_to_file(self, data, f):
+        writer = csv.DictWriter(f, data[0].keys())
+        writer.writeheader()
+        for row in data:
+            writer.writerow(row)
+
+    def _save_to_cache(self, data, filename):
+        try:
+            with open(filename, 'w', newline="") as f:
+                self._write_to_file(data, f)
+        except TypeError:
+            with open(filename, 'wb') as f:
+                self._write_to_file(data, f)
+
 
 
 class SmartspacesJSONAdapter():
